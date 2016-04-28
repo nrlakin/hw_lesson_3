@@ -29,7 +29,10 @@ const unsigned char AccelInitPacket[6] = {
                                           0x00   // int is active high, int2 disabled
                                          };
 
-                                          
+/*
+ * readFromAccel
+ * Read n_bytes from the accelerometer, starting at register start_addr, and place them in array dest.
+ */
 void readFromAccel(unsigned char n_bytes, unsigned char start_addr, unsigned char *dest) {
   unsigned char i;
   Wire.beginTransmission(ACCEL_ADDRESS);
@@ -42,6 +45,10 @@ void readFromAccel(unsigned char n_bytes, unsigned char start_addr, unsigned cha
   return;
 }
 
+/*
+ * writeToAccel
+ * Write n_bytes to the accelerometer, starting at register start_addr, from buffer src.
+ */
 void writeToAccel(unsigned char n_bytes, unsigned char start_addr, unsigned char *src) {
   unsigned char i;
   unsigned char sub_addr;
@@ -55,7 +62,11 @@ void writeToAccel(unsigned char n_bytes, unsigned char start_addr, unsigned char
   Wire.endTransmission(true);
   return;
 }
-  
+
+/*
+ * initAccelSensor
+ * Initialize the accelerometer with range +/- 2g, no interrupt.
+ */
 void initAccelSensor(void) {
   Wire.begin();
   writeToAccel(6, CTRL_REG1, (unsigned char*)AccelInitPacket);
@@ -83,6 +94,10 @@ void clearInterrupt(void) {
   readClickSrc();
 }
 
+/*
+ * readAccelSensor
+ * Get signed values for x, y, and z accleration, and place them in accel_data_t result.
+ */
 void readAccelSensor(accel_data_t * result) {
   unsigned char result_raw[6];
   unsigned char *outPtr = result_raw;
